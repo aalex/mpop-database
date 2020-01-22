@@ -1,4 +1,41 @@
+enum Gender {
+  MALE
+  FEMALE
+  NON_BINARY
+  OTHER_GENDER
+  PREFER_NOT_TO_SAY
+}
+
+type Tag {
+  id: ID! @id
+  rfid: String! @unique
+}
+
 type User {
   id: ID! @id
-  name: String!
+  created_at: DateTime! @createdAt
+  updated_at: DateTime! @updatedAt
+  tag: Tag! @relation(link: INLINE)
+  gender: Gender @default(value: PREFER_NOT_TO_SAY)
+  answers: [Answer!]!
+}
+
+type Answer {
+  id: ID! @id
+  question_identifier: String!
+  question: Question! @relation(link: INLINE)
+  created_at: DateTime! @createdAt
+  updated_at: DateTime! @updatedAt
+  user: User! @relation(link: INLINE)
+  answer_value: Int!
+}
+
+type Question {
+  id: ID! @id
+  question_identifier: String! @unique
+  question_fr: String!
+  question_en: String!
+  created_at: DateTime! @createdAt
+  updated_at: DateTime! @updatedAt
+  answers: [Answer!]!
 }
